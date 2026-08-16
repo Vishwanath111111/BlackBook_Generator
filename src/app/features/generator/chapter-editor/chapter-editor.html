@@ -1,0 +1,84 @@
+<div class="editor-page-container animate-fade-in" *ngIf="chapter && project">
+  <!-- Top Navigation & Status Bar -->
+  <div class="editor-top-bar">
+    <div class="top-left">
+      <a routerLink="/generator" class="back-link">← Back to Chapter Generator</a>
+      <h2>Chapter {{ chapter.chapterNumber }}: {{ chapter.title }}</h2>
+      <div class="proj-subtitle">{{ project.title }} • {{ project.branch }}</div>
+    </div>
+
+    <div class="top-right">
+      <div class="stats-badge">
+        <span class="stat-item">📝 <strong>{{ wordCount }}</strong> Words</span>
+        <span class="stat-divider">•</span>
+        <span class="stat-item">⏱️ <strong>{{ readingTimeMinutes }}</strong> Min Read</span>
+      </div>
+
+      <div class="save-status" [class.unsaved]="!isSaved">
+        <span>{{ saveMessage }}</span>
+      </div>
+
+      <button (click)="saveChanges()" class="btn btn-primary btn-sm">
+        💾 Save Changes
+      </button>
+      
+      <a routerLink="/export" class="btn btn-secondary btn-sm">
+        📥 Export Document
+      </a>
+    </div>
+  </div>
+
+  <!-- AI Refinement Quick Bar -->
+  <div class="ai-toolbar">
+    <span class="toolbar-label">✨ AI Refine Actions:</span>
+    <button (click)="aiExpandContent()" class="btn btn-sm btn-outline">
+      + Expand Section (+200 Words)
+    </button>
+    <button (click)="aiAddTable()" class="btn btn-sm btn-outline">
+      📊 Insert Test Case Table
+    </button>
+    
+    <!-- View Switcher Tabs -->
+    <div class="tab-switcher">
+      <button [class.active]="activeTab === 'editor'" (click)="activeTab = 'editor'">Markdown Editor</button>
+      <button [class.active]="activeTab === 'split'" (click)="activeTab = 'split'">Split View</button>
+      <button [class.active]="activeTab === 'preview'" (click)="activeTab = 'preview'">Academic Preview</button>
+    </div>
+  </div>
+
+  <!-- Main Viewport (Split or Single Panel) -->
+  <div class="editor-viewport" [class.mode-split]="activeTab === 'split'" [class.mode-editor]="activeTab === 'editor'" [class.mode-preview]="activeTab === 'preview'">
+    
+    <!-- Left: Markdown Editor Panel -->
+    <div class="editor-panel card" *ngIf="activeTab === 'editor' || activeTab === 'split'">
+      <div class="panel-header">
+        <span>MARKDOWN EDITOR</span>
+        <span class="sub">Times New Roman 12pt Academic Format Compatible</span>
+      </div>
+      <textarea 
+        [(ngModel)]="editorContent" 
+        (input)="onContentChange()" 
+        class="markdown-textarea" 
+        placeholder="Type or generate your academic chapter content here using Markdown formatting..."
+      ></textarea>
+    </div>
+
+    <!-- Right: Formatted Academic Preview Panel -->
+    <div class="preview-panel card" *ngIf="activeTab === 'preview' || activeTab === 'split'">
+      <div class="panel-header">
+        <span>ACADEMIC BLACK BOOK PREVIEW</span>
+        <span class="badge badge-primary">University Style</span>
+      </div>
+
+      <div class="preview-document-page">
+        <div class="academic-chapter-header">
+          <h1>CHAPTER {{ chapter.chapterNumber }}</h1>
+          <h2>{{ chapter.title.toUpperCase() }}</h2>
+        </div>
+
+        <div class="preview-body" [innerHTML]="formatMarkdown(editorContent)"></div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<div class="auth-page-container">
+  <div class="auth-card animate-fade-in">
+    <div class="auth-header">
+      <div class="brand-badge">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="8.5" cy="7" r="4"/>
+          <polyline points="17 11 19 13 23 9"/>
+        </svg>
+      </div>
+      <h2>Create Student Account</h2>
+      <p>Get 10,000 Free AI Word Credits to generate your Black Book</p>
+    </div>
+
+    <div class="alert-error" *ngIf="errorMessage">
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="full-name">Full Student Name</label>
+        <input id="full-name" type="text" formControlName="name" class="form-control" placeholder="e.g. Rahul Sharma" />
+      </div>
+
+      <div class="form-group">
+        <label for="signup-email">Email Address</label>
+        <input id="signup-email" type="email" formControlName="email" class="form-control" placeholder="rahul@college.edu" />
+      </div>
+
+      <div class="form-group">
+        <label for="college-name">Engineering College / Institute</label>
+        <input id="college-name" type="text" formControlName="collegeName" class="form-control" placeholder="e.g. VJTI Mumbai" />
+      </div>
+
+      <div class="form-group">
+        <label for="branch-select">Engineering Branch</label>
+        <select id="branch-select" formControlName="branch" class="form-control">
+          <option *ngFor="let b of branches" [value]="b">{{ b }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="signup-password">Password</label>
+        <input id="signup-password" type="password" formControlName="password" class="form-control" placeholder="Minimum 6 characters" />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Create Free Student Account</span>
+        <span *ngIf="isLoading">Creating Account...</span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <span>Already registered?</span>
+      <a routerLink="/auth/login">Log In Here</a>
+    </div>
+  </div>
+</div>

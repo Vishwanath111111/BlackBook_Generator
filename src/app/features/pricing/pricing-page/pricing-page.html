@@ -1,0 +1,59 @@
+<div class="pricing-container animate-fade-in">
+  <!-- Toast Notification -->
+  <div class="toast-success" *ngIf="toastMessage">
+    ✅ {{ toastMessage }}
+  </div>
+
+  <!-- Header -->
+  <div class="pricing-header">
+    <span class="badge badge-primary">STUDENT FRIENDLY PRICING</span>
+    <h2>Accelerate Your Engineering Black Book</h2>
+    <p>Unlock complete chapter word count controls (400w, 700w, 1000w), Mermaid UML diagrams, and academic DOCX/PDF exports</p>
+  </div>
+
+  <!-- Pricing Cards Grid -->
+  <div class="pricing-grid">
+    <div 
+      class="pricing-card card" 
+      *ngFor="let plan of paymentService.plans"
+      [class.popular]="plan.popular"
+      [class.current]="authService.currentUser()?.plan === plan.id"
+    >
+      <div class="popular-badge" *ngIf="plan.popular">MOST POPULAR FOR B.E. / B.TECH</div>
+
+      <h3 class="plan-name">{{ plan.name }}</h3>
+      
+      <div class="price-row">
+        <span class="price-val">{{ plan.price }}</span>
+        <span class="price-period">/ {{ plan.period }}</span>
+      </div>
+
+      <div class="credits-badge">
+        ⚡ Includes {{ plan.wordCredits | number }} AI Word Credits
+      </div>
+
+      <ul class="features-list">
+        <li *ngFor="let feat of plan.features">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="check-icon">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>{{ feat }}</span>
+        </li>
+      </ul>
+
+      <button 
+        (click)="onUpgrade(plan)" 
+        class="btn w-100 mt-auto" 
+        [class.btn-primary]="plan.popular" 
+        [class.btn-secondary]="!plan.popular"
+        [disabled]="upgradingPlanId === plan.id"
+      >
+        <span *ngIf="authService.currentUser()?.plan === plan.id">Active Current Plan</span>
+        <span *ngIf="authService.currentUser()?.plan !== plan.id && upgradingPlanId !== plan.id">
+          Upgrade to {{ plan.name }}
+        </span>
+        <span *ngIf="upgradingPlanId === plan.id">Processing Upgrade...</span>
+      </button>
+    </div>
+  </div>
+</div>

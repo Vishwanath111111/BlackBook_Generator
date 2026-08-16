@@ -1,0 +1,121 @@
+<div class="project-form-container animate-fade-in">
+  <div class="form-header-bar">
+    <div>
+      <a routerLink="/projects" class="back-link">← Back to Projects</a>
+      <h2>Create New Black Book Project Report</h2>
+      <p>Configure your final-year engineering project details for automatic 7-chapter generation</p>
+    </div>
+  </div>
+
+  <div class="form-card card">
+    <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-section">
+        <h3 class="section-heading">1. Project Metadata & Technical Topic</h3>
+        
+        <div class="form-group">
+          <label for="project-title-input">Full Project Title *</label>
+          <input 
+            id="project-title-input" 
+            type="text" 
+            formControlName="title" 
+            class="form-control" 
+            placeholder="e.g. AI-Powered Autonomous Drone Navigation System for Precision Agriculture" 
+          />
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="project-branch-select">Engineering Branch *</label>
+            <select id="project-branch-select" formControlName="branch" class="form-control">
+              <option *ngFor="let b of branches" [value]="b">{{ b }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="academic-year-input">Academic Year *</label>
+            <input id="academic-year-input" type="text" formControlName="academicYear" class="form-control" placeholder="2025-2026" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="tech-stack-input">Technologies / Tech Stack *</label>
+          <input 
+            id="tech-stack-input" 
+            type="text" 
+            formControlName="techStack" 
+            class="form-control" 
+            placeholder="e.g. Angular 22, Node.js, Express, TensorFlow, OpenCV, MongoDB" 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description-input">Project Synopsis / Abstract Overview *</label>
+          <textarea 
+            id="description-input" 
+            formControlName="description" 
+            class="form-control" 
+            rows="4" 
+            placeholder="Describe the main objectives, problem statement, key modules, and expected outcomes of your engineering project..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-section mt-4">
+        <h3 class="section-heading">2. University & Academic Accreditation Details</h3>
+
+        <div class="form-group">
+          <label for="college-name-input">College / Institute Name *</label>
+          <input 
+            id="college-name-input" 
+            type="text" 
+            formControlName="collegeName" 
+            class="form-control" 
+            placeholder="e.g. Veermata Jijabai Technological Institute (VJTI), Mumbai" 
+          />
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="student-name-input">Student Name(s) *</label>
+            <input 
+              id="student-name-input" 
+              type="text" 
+              formControlName="studentName" 
+              class="form-control" 
+              placeholder="e.g. Rahul Sharma, Priya Patel, Amit Kumar" 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="guide-name-input">Project Guide / Professor Name *</label>
+            <input 
+              id="guide-name-input" 
+              type="text" 
+              formControlName="guideName" 
+              class="form-control" 
+              placeholder="e.g. Prof. Dr. A. K. Verma" 
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Auto Generation Info Box -->
+      <div class="info-box">
+        <div class="info-icon">💡</div>
+        <div class="info-text">
+          <strong>Automatic Black Book Chapter Initialization:</strong> Submitting this form will automatically configure your project with the 7 standard university chapters (Introduction, Literature Survey, Requirement Analysis, System Design with Diagrams, Implementation, Testing, and Conclusion) + IEEE References.
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/projects" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary btn-lg" [disabled]="isSubmitting">
+          <span *ngIf="!isSubmitting">✨ Initialize & Generate Black Book</span>
+          <span *ngIf="isSubmitting">Creating Project...</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

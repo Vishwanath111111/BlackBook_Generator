@@ -1,0 +1,111 @@
+<div class="generator-container animate-fade-in" *ngIf="projectService.activeProject() as project">
+  
+  <app-loading-spinner 
+    *ngIf="isGenerating" 
+    [message]="generationProgressMessage"
+    subMessage="Generating academic text, IEEE references, and Mermaid UML code..."
+  ></app-loading-spinner>
+
+  <div class="generator-wrapper" *ngIf="!isGenerating">
+    <!-- Header -->
+    <div class="generator-header-bar">
+      <div>
+        <span class="badge badge-primary">ACADEMIC BLACK BOOK REPORT GENERATOR</span>
+        <h2>{{ project.title }}</h2>
+        <p>{{ project.branch }} • {{ project.collegeName }} • Guide: {{ project.guideName }}</p>
+      </div>
+      <a routerLink="/export" class="btn btn-outline">
+        📥 Export Options
+      </a>
+    </div>
+
+    <div class="generator-grid">
+      <!-- Left Panel: Chapter Selector & Controls -->
+      <div class="panel-card card">
+        <h3 class="panel-heading">1. Select Chapter to Generate</h3>
+        
+        <div class="chapter-list">
+          <div 
+            class="chapter-select-item" 
+            *ngFor="let ch of project.chapters"
+            [class.selected]="ch.id === selectedChapterId"
+            (click)="selectedChapterId = ch.id"
+          >
+            <div class="ch-badge">Ch {{ ch.chapterNumber }}</div>
+            <div class="ch-info">
+              <div class="ch-title">{{ ch.title }}</div>
+              <div class="ch-synopsis">{{ ch.synopsis }}</div>
+            </div>
+            <div class="ch-status">
+              <span class="badge" [class.badge-success]="ch.status === 'completed'" [class.badge-warning]="ch.status === 'draft'">
+                {{ ch.status === 'completed' ? (ch.wordCountActual + ' words') : 'Draft' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Word Count Control & AI Settings -->
+      <div class="panel-card card">
+        <div *ngIf="selectedChapter as chapter; else noChapterSelected">
+          <h3 class="panel-heading">2. Target Word Count & Parameters</h3>
+
+          <!-- Word Count Selector Pills -->
+          <div class="form-group mb-4">
+            <label>Select Target Chapter Word Count *</label>
+            <div class="word-count-presets-grid">
+              <div 
+                class="preset-card" 
+                *ngFor="let preset of presets"
+                [class.active]="selectedWordCount === preset.key"
+                (click)="selectWordCount(preset.key)"
+              >
+                <div class="preset-header">
+                  <span class="preset-label">{{ preset.label }}</span>
+                  <span class="preset-words">{{ preset.targetWords }} Words</span>
+                </div>
+                <div class="preset-desc">{{ preset.description }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Academic Custom Directives -->
+          <div class="form-group mb-4">
+            <label for="custom-instructions-input">Custom Focus Directives / Emphasis (Optional)</label>
+            <textarea 
+              id="custom-instructions-input" 
+              [(ngModel)]="customInstructions" 
+              class="form-control" 
+              rows="3" 
+              placeholder="e.g. Focus on deep learning model architecture, add extra details about dataset preprocessing, emphasize Indian healthcare context..."
+            ></textarea>
+          </div>
+
+          <!-- Chapter Info Box -->
+          <div class="info-box">
+            <div class="info-icon">📑</div>
+            <div class="info-text">
+              <strong>Targeting Chapter {{ chapter.chapterNumber }}: {{ chapter.title }}</strong><br/>
+              Expected output will be formatted in academic Markdown with structured headers (## 1.1, 1.2), comparative tables, and Mermaid UML diagrams where applicable.
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <a [routerLink]="['/generator/editor', project.id, chapter.id]" class="btn btn-secondary" *ngIf="chapter.content">
+              ✏️ Open Existing Draft
+            </a>
+            <button (click)="onGenerate()" class="btn btn-primary btn-lg flex-1">
+              ✨ Generate Chapter Content
+            </button>
+          </div>
+
+        </div>
+
+        <ng-template #noChapterSelected>
+          <div class="text-muted p-4 text-center">Select a chapter from the left panel to begin.</div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+</div>

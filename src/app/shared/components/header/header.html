@@ -1,0 +1,60 @@
+<header class="header-bar">
+  <!-- Active Project Quick Switcher -->
+  <div class="header-project-select" *ngIf="projectService.projects().length > 0">
+    <label for="project-select-dropdown">Current Black Book:</label>
+    <select id="project-select-dropdown" [value]="projectService.activeProject()?.id" (change)="onSelectProject($event)" class="select-input">
+      <option *ngFor="let proj of projectService.projects()" [value]="proj.id">
+        {{ proj.title }} ({{ proj.branch }})
+      </option>
+    </select>
+  </div>
+
+  <div class="header-right">
+    <!-- Action Button -->
+    <a routerLink="/projects/new" class="btn btn-primary btn-sm">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      <span>+ New Black Book</span>
+    </a>
+
+    <!-- Student User Profile Menu -->
+    <div class="user-menu-container" *ngIf="authService.currentUser() as user">
+      <button class="user-profile-btn" (click)="toggleProfileMenu()">
+        <div class="avatar-circle">
+          {{ user.name.charAt(0) }}
+        </div>
+        <div class="user-details">
+          <span class="user-name">{{ user.name }}</span>
+          <span class="user-college">{{ user.collegeName || 'Engineering Student' }}</span>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      <!-- Profile Dropdown Menu -->
+      <div class="dropdown-menu animate-fade-in" *ngIf="isProfileMenuOpen">
+        <div class="dropdown-header">
+          <div class="email">{{ user.email }}</div>
+          <div class="branch-tag">{{ user.branch }}</div>
+        </div>
+        <div class="dropdown-divider"></div>
+        <a routerLink="/pricing" class="dropdown-item" (click)="isProfileMenuOpen = false">
+          <span>Subscription Plan</span>
+          <span class="badge badge-primary">{{ user.plan | uppercase }}</span>
+        </a>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item text-danger" (click)="onLogout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

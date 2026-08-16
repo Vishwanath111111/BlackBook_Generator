@@ -1,0 +1,105 @@
+<div class="projects-container animate-fade-in">
+  <!-- Header Bar -->
+  <div class="projects-header">
+    <div>
+      <h2>My Black Book Projects</h2>
+      <p>Manage and generate final-year engineering reports formatted for your university</p>
+    </div>
+    <a routerLink="/projects/new" class="btn btn-primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      <span>Create New Black Book</span>
+    </a>
+  </div>
+
+  <!-- Filter & Search Controls -->
+  <div class="filters-bar">
+    <div class="search-input-wrapper">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" placeholder="Search projects by title, topic, or student..." (input)="onSearchChange($event)" class="form-control search-field" />
+    </div>
+
+    <div class="branch-pills-list">
+      <button 
+        *ngFor="let b of branches" 
+        [class.active]="selectedBranch === b" 
+        (click)="filterByBranch(b)"
+        class="branch-filter-pill"
+      >
+        {{ b }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Project Cards Grid -->
+  <div class="projects-grid" *ngIf="filteredProjects.length > 0; else noProjects">
+    <div 
+      class="project-card card card-interactive" 
+      *ngFor="let proj of filteredProjects"
+      [class.active-selected]="proj.id === projectService.activeProject()?.id"
+      (click)="selectAndNavigate(proj)"
+    >
+      <div class="card-header-bar">
+        <span class="badge badge-primary">{{ proj.branch }}</span>
+        <span class="academic-year">{{ proj.academicYear }}</span>
+      </div>
+
+      <h3 class="proj-title">{{ proj.title }}</h3>
+      <p class="proj-desc">{{ proj.description }}</p>
+
+      <div class="meta-row">
+        <div class="meta-item">
+          <span class="meta-label">College:</span>
+          <span class="meta-val">{{ proj.collegeName }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Guide:</span>
+          <span class="meta-val">{{ proj.guideName }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Student:</span>
+          <span class="meta-val">{{ proj.studentName }}</span>
+        </div>
+      </div>
+
+      <!-- Chapter Progress Bar -->
+      <div class="chapter-progress">
+        <div class="progress-info">
+          <span>7 Standard Chapters + References</span>
+          <span class="percent">{{ proj.chapters.length }} Chapters Configured</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar-fill" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <a routerLink="/generator" (click)="selectAndNavigate(proj)" class="btn btn-sm btn-primary">
+          Open Generator
+        </a>
+        <a routerLink="/export" (click)="selectAndNavigate(proj)" class="btn btn-sm btn-secondary">
+          Export DOCX / PDF
+        </a>
+        <button (click)="deleteProject($event, proj.id)" class="btn btn-sm btn-outline text-danger" title="Delete Project">
+          🗑️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noProjects>
+    <div class="empty-state card">
+      <div class="empty-icon">📁</div>
+      <h3>No Black Book Projects Found</h3>
+      <p>Click below to create your first academic project report and generate chapters.</p>
+      <a routerLink="/projects/new" class="btn btn-primary mt-3">
+        + Create Black Book Project
+      </a>
+    </div>
+  </ng-template>
+</div>

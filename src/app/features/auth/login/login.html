@@ -1,0 +1,53 @@
+<div class="auth-page-container">
+  <div class="auth-card animate-fade-in">
+    <!-- Brand Header -->
+    <div class="auth-header">
+      <div class="brand-badge">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <path d="M9 7h6"/>
+        </svg>
+      </div>
+      <h2>Welcome Back, Student!</h2>
+      <p>Log in to access your Engineering Black Book project reports</p>
+    </div>
+
+    <!-- Error Alert -->
+    <div class="alert-error" *ngIf="errorMessage">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="email-input">Student Email Address</label>
+        <input id="email-input" type="email" formControlName="email" class="form-control" placeholder="e.g. rahul.sharma@engg.edu" />
+      </div>
+
+      <div class="form-group">
+        <label for="password-input">Password</label>
+        <input id="password-input" type="password" formControlName="password" class="form-control" placeholder="••••••••" />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Log In to BlackBook AI</span>
+        <span *ngIf="isLoading">Authenticating...</span>
+      </button>
+
+      <button type="button" (click)="quickDemoLogin()" class="btn btn-outline w-100 mt-2">
+        ⚡ Quick Demo Student Login
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <span>Don't have an account?</span>
+      <a routerLink="/auth/signup">Sign Up for Free</a>
+    </div>
+  </div>
+</div>

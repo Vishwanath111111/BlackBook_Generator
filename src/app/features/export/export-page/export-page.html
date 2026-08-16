@@ -1,0 +1,114 @@
+<div class="export-container animate-fade-in" *ngIf="activeProject as proj">
+  <!-- Header -->
+  <div class="export-header-bar">
+    <div>
+      <span class="badge badge-primary">ACADEMIC EXPORT ENGINE</span>
+      <h2>Export Black Book Report</h2>
+      <p>Download university-formatted documents compliant with Indian Engineering guidelines</p>
+    </div>
+  </div>
+
+  <div class="export-grid">
+    <!-- Left Panel: Export Controls -->
+    <div class="export-controls-card card">
+      <h3 class="panel-heading">1. Select Project to Export</h3>
+
+      <div class="form-group mb-4">
+        <label for="export-proj-select">Choose Black Book Project:</label>
+        <select id="export-proj-select" [value]="proj.id" (change)="selectProject($any($event.target).value)" class="form-control">
+          <option *ngFor="let p of projectService.projects()" [value]="p.id">
+            {{ p.title }} ({{ p.branch }})
+          </option>
+        </select>
+      </div>
+
+      <!-- Report Summary Widget -->
+      <div class="summary-widget">
+        <div class="widget-row">
+          <span class="label">Project Title:</span>
+          <span class="val font-bold">{{ proj.title }}</span>
+        </div>
+        <div class="widget-row">
+          <span class="label">Branch & College:</span>
+          <span class="val">{{ proj.branch }} • {{ proj.collegeName }}</span>
+        </div>
+        <div class="widget-row">
+          <span class="label">Chapters Ready:</span>
+          <span class="val text-success">{{ completedChaptersCount }} / {{ proj.chapters.length }} Chapters Completed</span>
+        </div>
+        <div class="widget-row">
+          <span class="label">Total Word Count:</span>
+          <span class="val text-primary">{{ totalWords | number }} Words</span>
+        </div>
+      </div>
+
+      <h3 class="panel-heading mt-4">2. Choose Download Format</h3>
+
+      <!-- Export Action Buttons Grid -->
+      <div class="export-buttons-list">
+        <!-- DOCX Export Button -->
+        <button (click)="onExportDocx()" class="export-btn docx-btn">
+          <div class="btn-icon">📄</div>
+          <div class="btn-text">
+            <div class="btn-title">Download Microsoft Word (.docx)</div>
+            <div class="btn-sub">Academic style: Times New Roman, 1.5 line spacing, Title & Certificate page</div>
+          </div>
+          <div class="btn-tag">RECOMMENDED</div>
+        </button>
+
+        <!-- PDF Export Button -->
+        <button (click)="onPrintPdf()" class="export-btn pdf-btn">
+          <div class="btn-icon">🖨️</div>
+          <div class="btn-text">
+            <div class="btn-title">Print / Download PDF Report</div>
+            <div class="btn-sub">Opens printable window formatted to A4 dimensions with page breaks</div>
+          </div>
+        </button>
+
+        <!-- Markdown Export Button -->
+        <button (click)="onExportMarkdown()" class="export-btn md-btn">
+          <div class="btn-icon">📝</div>
+          <div class="btn-text">
+            <div class="btn-title">Download Markdown (.md)</div>
+            <div class="btn-sub">Raw structured markdown file for technical documentation</div>
+          </div>
+        </button>
+
+        <!-- Plain Text Export Button -->
+        <button (click)="onExportText()" class="export-btn txt-btn">
+          <div class="btn-icon">📃</div>
+          <div class="btn-text">
+            <div class="btn-title">Download Plain Text (.txt)</div>
+            <div class="btn-sub">Simple text file containing all chapter titles and content</div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Panel: Live Document Cover & Format Preview -->
+    <div class="export-preview-card card">
+      <h3 class="panel-heading">Title Page & Layout Preview</h3>
+      
+      <div class="academic-paper-mockup">
+        <div class="paper-title-page">
+          <div class="mockup-title">{{ proj.title }}</div>
+          <div class="mockup-sub">A PROJECT REPORT SUBMITTED IN PARTIAL FULFILLMENT OF THE REQUIREMENTS FOR THE DEGREE OF</div>
+          <div class="mockup-degree">BACHELOR OF ENGINEERING IN {{ proj.branch.toUpperCase() }}</div>
+          
+          <div class="mockup-section">
+            <div class="mockup-label">SUBMITTED BY:</div>
+            <div class="mockup-val">{{ proj.studentName.toUpperCase() }}</div>
+          </div>
+
+          <div class="mockup-section">
+            <div class="mockup-label">UNDER THE GUIDANCE OF:</div>
+            <div class="mockup-val">{{ proj.guideName }}</div>
+          </div>
+
+          <div class="mockup-college">{{ proj.collegeName.toUpperCase() }}</div>
+          <div class="mockup-year">ACADEMIC YEAR {{ proj.academicYear }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
